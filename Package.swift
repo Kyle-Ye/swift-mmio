@@ -29,8 +29,12 @@ var package = Package(
     .library(name: "SVD", targets: ["SVD"]),
   ],
   dependencies: [
-    .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.3.0"),
-    .package(url: "https://github.com/apple/swift-syntax.git", from: "509.0.2"),
+    .package(
+      url: "https://github.com/apple/swift-argument-parser.git",
+      from: "1.4.0"),
+    .package(
+      url: "https://github.com/apple/swift-syntax.git",
+      from: "509.0.2"),
   ],
   targets: [
     // MMIO
@@ -137,11 +141,55 @@ var package = Package(
         .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
         .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax"),
       ]),
-  ])
+  ],
+  cxxLanguageStandard: .cxx11)
 
+let svd2lldb = "FEATURE_SVD2LLDB"
+if featureIsEnabled(named: svd2lldb, override: nil) {
+  let symbolsURL = URL(fileURLWithPath: #file)
+    .deletingLastPathComponent()
+    .appendingPathComponent("Sources")
+    .appendingPathComponent("LLDB")
+    .appendingPathComponent("LLDB.cpp")
+  let linkerFlags = try String(contentsOf: symbolsURL)
+    .split(separator: "\n")
+    .filter { $0.hasPrefix("__") }
+    .flatMap { ["-Xlinker", "-U", "-Xlinker", String($0)] }
+
+  package.targets += [
+    .target(name: "LLDB"),
+    .target(
+      name: "SVD2LLDB",
+      dependencies: [
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+        "LLDB",
+        "SVD",
+      ],
+      swiftSettings: [.interoperabilityMode(.Cxx)],
+      linkerSettings: [.unsafeFlags(linkerFlags)]),
+    .testTarget(
+      name: "SVD2LLDBTests",
+      dependencies: ["SVD2LLDB"],
+      swiftSettings: [.interoperabilityMode(.Cxx)]),
+  ]
+
+  package.products.append(
+    .library(
+      name: "SVD2LLDB",
+      type: .dynamic,
+      targets: ["SVD2LLDB"]))
+}
+
+// Package API Extensions
 func featureIsEnabled(named featureName: String, override: Bool?) -> Bool {
   let key = "SWIFT_MMIO_\(featureName)"
-  let environment = ProcessInfo.processInfo.environment[key] != nil
+  let environment: Bool
+  switch Context.environment[key]?.lowercased() {
+  case "1", "true", "yes", "y":
+    environment = true
+  default:
+    environment = false
+  }
   return override ?? environment
 }
 
