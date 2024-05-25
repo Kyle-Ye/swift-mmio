@@ -9,7 +9,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-import LLDB
+import CLLDB
 import Foundation
 import MMIOUtilities
 import SVD

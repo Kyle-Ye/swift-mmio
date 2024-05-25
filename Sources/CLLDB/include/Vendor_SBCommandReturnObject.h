@@ -6,28 +6,21 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLDB_API_SBERROR_H
-#define LLDB_API_SBERROR_H
-
-#include "lldb-enumerations.h"
+#pragma once
 
 namespace lldb {
 
-class SBError {
+class SBCommandReturnObject {
 public:
-  SBError();
+  SBCommandReturnObject(const lldb::SBCommandReturnObject &rhs);
 
-  SBError(const lldb::SBError &rhs);
+  ~SBCommandReturnObject();
 
-  ~SBError();
+  void AppendWarning(const char *message);
 
-  const char* GetCString() const;
+  void PutCString(const char *string, int len = -1);
 
-  void SetError(uint32_t err, lldb::ErrorType type);
-
-  bool IsValid() const;
+  void SetError(const char *error_cstr);
 };
 
 } // namespace lldb
-
-#endif // LLDB_API_SBERROR_H

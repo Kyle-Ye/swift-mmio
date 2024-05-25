@@ -6,29 +6,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLDB_API_SBDEBUGGER_H
-#define LLDB_API_SBDEBUGGER_H
+#pragma once
 
-#include "SBTarget.h"
-#include "SBCommandInterpreter.h"
+#include "Vendor_lldb-types.h"
 
 namespace lldb {
 
-class SBCommandInterpreter;
-
-class SBDebugger {
+class SBProcess {
 public:
-  SBDebugger();
+  ~SBProcess();
 
-  SBDebugger(const lldb::SBDebugger &rhs);
+  size_t ReadMemory(addr_t addr, void *buf, size_t size, lldb::SBError &error);
 
-  ~SBDebugger();
-
-  lldb::SBCommandInterpreter GetCommandInterpreter() __attribute__((weak));
-
-  lldb::SBTarget GetSelectedTarget();
-}; // class SBDebugger
+  size_t WriteMemory(addr_t addr, const void *buf, size_t size,
+                     lldb::SBError &error);
+};
 
 } // namespace lldb
-
-#endif // LLDB_API_SBDEBUGGER_H

@@ -6,24 +6,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLDB_API_SBCOMMANDRETURNOBJECT_H
-#define LLDB_API_SBCOMMANDRETURNOBJECT_H
+#pragma once
 
 namespace lldb {
 
-class SBCommandReturnObject {
+class SBProcess;
+
+class SBTarget {
 public:
-  SBCommandReturnObject(const lldb::SBCommandReturnObject &rhs);
+  ~SBTarget();
 
-  ~SBCommandReturnObject();
-
-  void AppendWarning(const char *message);
-
-  void PutCString(const char *string, int len = -1);
-
-  void SetError(const char *error_cstr);
+  lldb::SBProcess GetProcess();
 };
 
 } // namespace lldb
-
-#endif // LLDB_API_SBCOMMANDRETURNOBJECT_H

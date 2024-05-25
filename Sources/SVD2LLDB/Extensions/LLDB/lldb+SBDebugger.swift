@@ -9,7 +9,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-import LLDB
+import CLLDB
 import MMIOUtilities
 
 extension lldb.SBDebugger: SVD2LLDBDebugger {

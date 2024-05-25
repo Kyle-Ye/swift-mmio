@@ -9,7 +9,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-import LLDB
+import CLLDB
 
 extension lldb.SBCommandReturnObject: SVD2LLDBResult {
   mutating func output(_ string: String) {

@@ -104,12 +104,12 @@ var package = Package(
       name: "SVDTests",
       dependencies: ["MMIOUtilities", "SVD"]),
 
-    .target(name: "LLDB"),
+    .target(name: "CLLDB"),
     .target(
       name: "SVD2LLDB",
       dependencies: [
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
-        "LLDB",
+        "CLLDB",
         "SVD",
       ],
       swiftSettings: [.interoperabilityMode(.Cxx)]),

@@ -11,8 +11,6 @@
 
 #pragma once
 
-#include "SBCommandInterpreter.h"
-
 namespace lldb {
   typedef char* _Nullable * _Nullable SBCommandRawArguments;
   typedef bool (^ _Nonnull CommandBodyBlock) (

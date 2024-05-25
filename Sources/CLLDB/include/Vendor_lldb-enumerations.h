@@ -6,20 +6,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLDB_API_SBTARGET_H
-#define LLDB_API_SBTARGET_H
+#pragma once
 
 namespace lldb {
 
-class SBProcess;
-
-class SBTarget {
-public:
-  ~SBTarget();
-
-  lldb::SBProcess GetProcess();
+enum ErrorType {
+  eErrorTypeInvalid,
+  eErrorTypeGeneric,    ///< Generic errors that can be any value.
+  eErrorTypeMachKernel, ///< Mach kernel error codes.
+  eErrorTypePOSIX,      ///< POSIX error codes.
+  eErrorTypeExpression, ///< These are from the ExpressionResults enum.
+  eErrorTypeWin32       ///< Standard Win32 error codes.
 };
 
 } // namespace lldb
-
-#endif // LLDB_API_SBTARGET_H

@@ -6,16 +6,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLDB_API_LLDB_H
-#define LLDB_API_LLDB_H
+#pragma once
 
-#include "SBCommandInterpreter.h"
-#include "SBCommandReturnObject.h"
-#include "SBDebugger.h"
-#include "SBError.h"
-#include "SBProcess.h"
-#include "SBTarget.h"
+#include <cstdint>
+#include <cstdlib>
 
-#include "_SBSwift.h"
+namespace lldb {
 
-#endif // LLDB_API_LLDB_H
+typedef uint64_t addr_t;
+
+} // namespace lldb

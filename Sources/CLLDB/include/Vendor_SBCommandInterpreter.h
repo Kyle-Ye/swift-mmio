@@ -6,11 +6,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLDB_API_SBCOMMANDINTERPRETER_H
-#define LLDB_API_SBCOMMANDINTERPRETER_H
+#pragma once
 
-#include "SBDebugger.h"
-#include "SBCommandReturnObject.h"
+#include "Vendor_SBDebugger.h"
+#include "Vendor_SBCommandReturnObject.h"
 
 namespace lldb {
 
@@ -44,5 +43,3 @@ public:
 };
 
 } // namespace lldb
-
-#endif // LLDB_API_SBCOMMANDINTERPRETER_H

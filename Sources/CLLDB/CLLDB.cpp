@@ -9,28 +9,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-// This file is a TBD style list of symbols which SVD2LLDB requires from
-// LLDB.framework. We use the contents of this file to create linker flags to
-// which allow these symbols to be undefined when linking. They ultimately are
-// provided by the lldb process into which SVD2LLDB is loaded.
-//
-// This strategy does not work for arm64e, we will deal with that problem later.
-//
-// This file intentionally has the extension cpp so Swift Package Manager
-// considers "LLDB" to be a C++ target.
-//
-// Important: Updating this file will not trigger SwiftPM to re-determine the
-// linker flags the LLDB target so be sure to modify Package.swift after
-// modifying this file so the linker flags are actually updated.
+#if !__has_include(<LLDB/LLDB.h>)
 
-#include "LLDB.h"
-
-#include <cstdlib>
+#include "CLLDB.h"
 #include <cstdio>
 
-#define ABORT {\
-  fprintf(stderr, "Invalid use of LLDB stub API %s\n", __FUNCTION__); \
-  std::abort(); \
+#define ABORT {                                                                \
+  fprintf(                                                                     \
+    stderr,                                                                    \
+    "Invalid use of LLDB stub API '%s'. This indicates "                       \
+    "'-F<directory-containing-LLDB.framework>' was not supplied when building "\
+    "SVD2LLDB.\n",                                                             \
+    __FUNCTION__);                                                             \
+  std::abort();                                                                \
 }
 
 using namespace lldb;
@@ -71,3 +62,5 @@ SBProcess::~SBProcess() ABORT
 // MARK: - SBTarget
 SBProcess SBTarget::GetProcess() ABORT
 SBTarget::~SBTarget() ABORT
+
+#endif
