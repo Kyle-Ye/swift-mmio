@@ -22,26 +22,26 @@ For example, the Swift.org toolchains for macOS include LLDB.framework with head
 2. Locate LLDB.framework and ensure it include headers. For example, a Swift.org macOS toolchain installed globally would be found under `/Library/Developer/Toolchains`.
 
   ```console
-  $ ls /Library/Developer/Toolchains/swift-DEVELOPMENT-SNAPSHOT-2024-03-07-a.xctoolchain/System/Library/PrivateFrameworks
+  $ ls /Library/Developer/Toolchains/swift-DEVELOPMENT-SNAPSHOT-2024-05-15-a.xctoolchain/System/Library/PrivateFrameworks
   LLDB.framework
   ```
 
-3. Next, build the SVD2LLDB product with the `SWIFT_MMIO_FEATURE_SVD2LLDB` feature flag enabled and pass the path to the directory containing LLDB.framework as a "framework search path" (-F) flag:
+3. Next, build the SVD2LLDB product with the `SWIFT_MMIO_FEATURE_SVD2LLDB` feature flag enabled and pass the path to the directory containing LLDB.framework as a "framework search path" (-F) flag to both the Swift and C compilers:
 
   ```console
   $ SWIFT_MMIO_FEATURE_SVD2LLDB=1 \
     swift build \
     --configuration release \
     --product SVD2LLDB \
-    -Xswiftc -F$DIRECTORY_CONTAINING_LLDB_FRAMEWORK
+    -Xswiftc -F$DIRECTORY_CONTAINING_LLDB_FRAMEWORK \
+    -Xcc -F$DIRECTORY_CONTAINING_LLDB_FRAMEWORK
   ```
 
-  > Important: Build failures indicating "LLDB.h" missing usually imply your "framework search path" is incorrect or your copy of LLDB.framework does not include the necessary headers to build SVD2LLDB. If this is the case you may encounter a compile error like:
+  > Important: The SVD2LLDB plugin may appear to build correctly even if your "framework search path" is incorrect or your copy of LLDB.framework does not include the necessary headers to build SVD2LLDB. If this is the case, you may encounter a run time failure like:
   >
-  > ```c
-  > /path/to/swift-mmio/Sources/CLLDB/include/CLLDB.h:13:10:
-  > #include "LLDB.h"
-  >          ╰─ error: 'LLDB/LLDB.h' file not found
+  > ```console
+  > (lldb) plugin load .build/debug/libSVD2LLDB.dylib
+  > Invalid use of LLDB stub API 'GetCommandInterpreter'. This indicates '-F<directory-containing-LLDB.framework>' was not supplied correctly when building SVD2LLDB.
   > ```
 
 4. Finally, locate the just-built plugin in your build directory:
