@@ -173,11 +173,9 @@ if featureIsEnabled(named: svd2lldb, override: nil) {
       swiftSettings: [.interoperabilityMode(.Cxx)]),
   ]
 
-  package.products.append(
-    .library(
-      name: "SVD2LLDB",
-      type: .dynamic,
-      targets: ["SVD2LLDB"]))
+  package.products += [
+    .library(name: "SVD2LLDB", type: .dynamic, targets: ["SVD2LLDB"])
+  ]
 }
 
 // Package API Extensions
