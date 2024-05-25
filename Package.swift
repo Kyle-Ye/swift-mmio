@@ -19,6 +19,8 @@ var package = Package(
     .library(name: "MMIO", targets: ["MMIO"]),
 
     // SVD
+    .library(name: "SVD", targets: ["SVD"]),
+    .library(name: "SVD2LLDB", type: .dynamic, targets: ["SVD2LLDB"]),
     .executable(
       // FIXME: rdar://112530586
       // XPM skips build plugin if product and target names are not identical.
@@ -26,7 +28,6 @@ var package = Package(
       name: "SVD2Swift",
       targets: ["SVD2Swift"]),
     .plugin(name: "SVD2SwiftPlugin", targets: ["SVD2SwiftPlugin"]),
-    .library(name: "SVD", targets: ["SVD"]),
   ],
   dependencies: [
     .package(
@@ -35,6 +36,7 @@ var package = Package(
     .package(
       url: "https://github.com/apple/swift-syntax.git",
       from: "509.0.2"),
+    .package(name: "swift-mmio-lldb", path: "Sources/LLDB"),
   ],
   targets: [
     // MMIO
@@ -144,39 +146,21 @@ var package = Package(
   ],
   cxxLanguageStandard: .cxx11)
 
-let svd2lldb = "FEATURE_SVD2LLDB"
-if featureIsEnabled(named: svd2lldb, override: nil) {
-  let symbolsURL = URL(fileURLWithPath: #file)
-    .deletingLastPathComponent()
-    .appendingPathComponent("Sources")
-    .appendingPathComponent("LLDB")
-    .appendingPathComponent("LLDB.cpp")
-  let linkerFlags = try String(contentsOf: symbolsURL)
-    .split(separator: "\n")
-    .filter { $0.hasPrefix("__") }
-    .flatMap { ["-Xlinker", "-U", "-Xlinker", String($0)] }
-
   package.targets += [
-    .target(name: "LLDB"),
     .target(
       name: "SVD2LLDB",
       dependencies: [
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
-        "LLDB",
+        .product(name: "LLDB", package: "swift-mmio-lldb"),
         "SVD",
       ],
-      swiftSettings: [.interoperabilityMode(.Cxx)],
-      linkerSettings: [.unsafeFlags(linkerFlags)]),
+      swiftSettings: [.interoperabilityMode(.Cxx)]),
     .testTarget(
       name: "SVD2LLDBTests",
       dependencies: ["SVD2LLDB"],
       swiftSettings: [.interoperabilityMode(.Cxx)]),
   ]
 
-  package.products += [
-    .library(name: "SVD2LLDB", type: .dynamic, targets: ["SVD2LLDB"]))
-  ]
-}
 
 // Package API Extensions
 func featureIsEnabled(named featureName: String, override: Bool?) -> Bool {

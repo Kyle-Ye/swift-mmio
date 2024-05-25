@@ -6,28 +6,29 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef LLDB_API_SBERROR_H
-#define LLDB_API_SBERROR_H
+#ifndef LLDB_API_SBDEBUGGER_H
+#define LLDB_API_SBDEBUGGER_H
 
-#include "lldb-enumerations.h"
+#include "SBTarget.h"
+#include "SBCommandInterpreter.h"
 
 namespace lldb {
 
-class SBError {
+class SBCommandInterpreter;
+
+class SBDebugger {
 public:
-  SBError();
+  SBDebugger();
 
-  SBError(const lldb::SBError &rhs);
+  SBDebugger(const lldb::SBDebugger &rhs);
 
-  ~SBError();
+  ~SBDebugger();
 
-  const char *GetCString() const;
+  lldb::SBCommandInterpreter GetCommandInterpreter() __attribute__((weak));
 
-  void SetError(uint32_t err, lldb::ErrorType type);
-
-  bool IsValid() const;
-};
+  lldb::SBTarget GetSelectedTarget();
+}; // class SBDebugger
 
 } // namespace lldb
 
-#endif // LLDB_API_SBERROR_H
+#endif // LLDB_API_SBDEBUGGER_H

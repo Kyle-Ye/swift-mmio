@@ -11,6 +11,7 @@
 
 import MMIOUtilities
 import XCTest
+import LLDB
 
 @testable import SVD2LLDB
 
