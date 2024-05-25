@@ -36,7 +36,6 @@ var package = Package(
     .package(
       url: "https://github.com/apple/swift-syntax.git",
       from: "509.0.2"),
-    .package(name: "swift-mmio-lldb", path: "Sources/LLDB"),
   ],
   targets: [
     // MMIO
@@ -105,6 +104,19 @@ var package = Package(
       name: "SVDTests",
       dependencies: ["MMIOUtilities", "SVD"]),
 
+    .target(name: "LLDB"),
+    .target(
+      name: "SVD2LLDB",
+      dependencies: [
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
+        "LLDB",
+        "SVD",
+      ],
+      swiftSettings: [.interoperabilityMode(.Cxx)]),
+    .testTarget(
+      name: "SVD2LLDBTests",
+      dependencies: ["SVD2LLDB"]),
+
     .executableTarget(
       name: "SVD2Swift",
       dependencies: [
@@ -145,21 +157,6 @@ var package = Package(
       ]),
   ],
   cxxLanguageStandard: .cxx11)
-
-  package.targets += [
-    .target(
-      name: "SVD2LLDB",
-      dependencies: [
-        .product(name: "ArgumentParser", package: "swift-argument-parser"),
-        .product(name: "LLDB", package: "swift-mmio-lldb"),
-        "SVD",
-      ],
-      swiftSettings: [.interoperabilityMode(.Cxx)]),
-    .testTarget(
-      name: "SVD2LLDBTests",
-      dependencies: ["SVD2LLDB"],
-      swiftSettings: [.interoperabilityMode(.Cxx)]),
-  ]
 
 
 // Package API Extensions
