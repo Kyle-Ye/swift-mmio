@@ -1,7 +1,6 @@
 // swift-tools-version: 5.9
 
 import CompilerPluginSupport
-import Foundation
 import PackageDescription
 
 var package = Package(
@@ -158,17 +157,17 @@ var package = Package(
   ],
   cxxLanguageStandard: .cxx11)
 
+let svd2lldb = "FEATURE_SVD2LLDB"
+if featureIsEnabled(named: svd2lldb, override: nil) {
+  package.targets
+    .first { $0.name == "SVD2LLDB" }!
+    .linkerSettings = [.linkedFramework("LLDB")]
+}
 
 // Package API Extensions
 func featureIsEnabled(named featureName: String, override: Bool?) -> Bool {
   let key = "SWIFT_MMIO_\(featureName)"
-  let environment: Bool
-  switch Context.environment[key]?.lowercased() {
-  case "1", "true", "yes", "y":
-    environment = true
-  default:
-    environment = false
-  }
+  let environment = Context.environment[key] != nil
   return override ?? environment
 }
 

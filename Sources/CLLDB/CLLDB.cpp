@@ -18,8 +18,8 @@
   fprintf(                                                                     \
     stderr,                                                                    \
     "Invalid use of LLDB stub API '%s'. This indicates "                       \
-    "'-F<directory-containing-LLDB.framework>' was not supplied when building "\
-    "SVD2LLDB.\n",                                                             \
+    "'-F<directory-containing-LLDB.framework>' was not supplied correctly "    \
+    "when building SVD2LLDB.\n",                                               \
     __FUNCTION__);                                                             \
   std::abort();                                                                \
 }
