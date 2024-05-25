@@ -64,8 +64,8 @@ SBError::SBError() ABORT
 SBError::~SBError() ABORT
 
 // MARK: - SBProcess
-size_t SBProcess::ReadMemory(unsigned long long, void*, unsigned long, SBError&) ABORT
-size_t SBProcess::WriteMemory(unsigned long long, void const*, unsigned long, SBError&) ABORT
+size_t SBProcess::ReadMemory(addr_t, void*, size_t, lldb::SBError&) ABORT
+size_t SBProcess::WriteMemory(addr_t, const void*, size_t, lldb::SBError&) ABORT
 SBProcess::~SBProcess() ABORT
 
 // MARK: - SBTarget
