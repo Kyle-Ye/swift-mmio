@@ -9,9 +9,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+import CLLDB
 import MMIOUtilities
 import XCTest
-import CLLDB
 
 @testable import SVD2LLDB
 

@@ -114,7 +114,8 @@ var package = Package(
       swiftSettings: [.interoperabilityMode(.Cxx)]),
     .testTarget(
       name: "SVD2LLDBTests",
-      dependencies: ["SVD2LLDB"]),
+      dependencies: ["SVD2LLDB"],
+      swiftSettings: [.interoperabilityMode(.Cxx)]),
 
     .executableTarget(
       name: "SVD2Swift",
@@ -159,9 +160,9 @@ var package = Package(
 
 let svd2lldb = "FEATURE_SVD2LLDB"
 if featureIsEnabled(named: svd2lldb, override: nil) {
-  package.targets
-    .first { $0.name == "SVD2LLDB" }!
-    .linkerSettings = [.linkedFramework("LLDB")]
+  let target = package.targets.first { $0.name == "SVD2LLDB" }
+  guard let target = target else { fatalError("Manifest inconsistency") }
+  target.linkerSettings = [.linkedFramework("LLDB")]
 }
 
 // Package API Extensions
